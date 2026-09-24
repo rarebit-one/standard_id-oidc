@@ -1,16 +1,10 @@
-require "standard_id"
+# Compatibility shim for the gem's former name, standard_id-provider.
+#
+# `require "standard_id/provider"` keeps working. The `StandardId::Provider`
+# constant alias itself lives in standard_id/oidc.rb, so it is available however
+# the gem was loaded. Both are deprecated: use `require "standard_id/oidc"` and
+# `StandardId::Oidc`. This shim will be removed in a future minor release.
+warn "[standard_id-oidc] `require \"standard_id/provider\"` is deprecated; " \
+     "use `require \"standard_id/oidc\"` instead.", uplevel: 1, category: :deprecated
 
-require "standard_id/provider/version"
-require "standard_id/provider/config/schema"
-require "standard_id/provider/id_token_service"
-require "standard_id/provider/extensions/token_grant_flow_ext"
-require "standard_id/provider/extensions/authorization_flow_ext"
-require "standard_id/provider/extensions/traditional_code_grant_ext"
-require "standard_id/provider/extensions/authorization_code_flow_ext"
-require "standard_id/provider/extensions/introspections_controller_ext"
-require "standard_id/provider/engine"
-
-module StandardId
-  module Provider
-  end
-end
+require "standard_id/oidc"

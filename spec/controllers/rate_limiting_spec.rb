@@ -8,7 +8,7 @@ require "rails_helper"
 # throttled introspection with the ordinary `{"active": false}` rather than a
 # 429, so the throttle cannot be read as a token-validity oracle. The 429 this
 # gem used to return for introspection was exactly that oracle.
-RSpec.describe "Rate limiting: Provider token endpoints", type: :request do
+RSpec.describe "Rate limiting: OIDC token endpoints", type: :request do
   let(:client_app) { create_oauth_client }
   let(:credential) { client_app.last }
   let(:auth_headers) { basic_auth_header(credential.client_id, "test-client-secret") }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe StandardId::Provider::Extensions::TokenGrantFlowExt do
+RSpec.describe StandardId::Oidc::Extensions::TokenGrantFlowExt do
   describe "#build_jwt_payload" do
     it "adds jti claim to JWT payloads" do
       token = generate_access_token

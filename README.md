@@ -1,12 +1,28 @@
-# StandardId::Provider
+# StandardId::Oidc
 
 > [!WARNING]
-> **Renamed to [`standard_id-oidc`](https://rubygems.org/gems/standard_id-oidc).**
-> `standard_id-provider` 0.5.0 is the final release under this name. Replace
-> `gem "standard_id-provider"` with `gem "standard_id-oidc"` in your Gemfile;
-> the new gem keeps a `require "standard_id/provider"` shim and a
-> `StandardId::Provider` alias so existing code keeps loading while you migrate.
-> `standard_id-oidc` is **experimental**.
+> **Experimental.** This engine is not used in production by any rarebit-one
+> app, `prepend`s into non-public `standard_id` internals (see below), and its
+> API may change in any minor release. Pin an exact version if you adopt it.
+
+> [!NOTE]
+> **Formerly `standard_id-provider`.** That gem's final release is 0.5.0. To
+> migrate, swap `gem "standard_id-provider"` for `gem "standard_id-oidc"`.
+> Existing code keeps loading for now. `require "standard_id/provider"` still
+> works, and `StandardId::Provider` is a deprecated alias of `StandardId::Oidc`
+> (that includes `StandardId::Provider::Engine` in your routes). Both will be
+> removed in a future minor release. Then rename:
+>
+> | Before | After |
+> |---|---|
+> | `StandardId::Provider::…` | `StandardId::Oidc::…` |
+> | `rails g standard_id:provider:install` | `rails g standard_id:oidc:install` |
+> | `config/initializers/standard_id_provider.rb` | `config/initializers/standard_id_oidc.rb` (the file name is cosmetic) |
+>
+> Unchanged: the `c.provider.*` settings (they configure the identity-provider
+> role), the table names (`standard_id_consent_grants`,
+> `standard_id_revoked_tokens`), and the migrations. Rails skips re-copying a
+> migration whose name already exists.
 
 OpenID Connect Identity Provider addon for [`standard_id`](https://github.com/rarebit-one/standard_id).
 
@@ -55,12 +71,12 @@ the gem.
 
 ```ruby
 # Gemfile
-gem "standard_id-provider"
+gem "standard_id-oidc"
 ```
 
 ```bash
 bundle install
-rails generate standard_id:provider:install
+rails generate standard_id:oidc:install
 rails db:migrate
 ```
 
@@ -68,7 +84,7 @@ The generator:
 
 * copies the engine's migrations (`consent_grants`, `revoked_tokens`) into
   `db/migrate/`
-* writes `config/initializers/standard_id_provider.rb`
+* writes `config/initializers/standard_id_oidc.rb`
 * mounts the engine in `config/routes.rb`
 
 It is **idempotent** — re-running skips anything already installed and says so.
@@ -86,7 +102,7 @@ It is **idempotent** — re-running skips anything already installed and says so
 ```ruby
 # config/routes.rb
 Rails.application.routes.draw do
-  mount StandardId::Provider::Engine => "/"
+  mount StandardId::Oidc::Engine => "/"
   mount StandardId::WebEngine => "/", as: :standard_id_web
 
   scope "api" do

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe StandardId::Provider::ConsentGrant, type: :model do
+RSpec.describe StandardId::Oidc::ConsentGrant, type: :model do
   let(:account) { Account.create!(name: "Test User", email: "test-#{SecureRandom.hex(4)}@example.com") }
   let(:client) { create_oauth_client.first }
 

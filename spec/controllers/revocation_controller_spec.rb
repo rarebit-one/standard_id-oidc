@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe StandardId::Provider::RevocationController, type: :request do
+RSpec.describe StandardId::Oidc::RevocationController, type: :request do
   let(:client_app) { create_oauth_client }
   let(:client) { client_app.first }
   let(:credential) { client_app.last }
@@ -25,7 +25,7 @@ RSpec.describe StandardId::Provider::RevocationController, type: :request do
 
       post "/api/provider/revoke", params: { token: token }, headers: auth_headers
 
-      expect(StandardId::Provider::RevokedToken.revoked?(jti)).to be true
+      expect(StandardId::Oidc::RevokedToken.revoked?(jti)).to be true
     end
 
     it "is idempotent" do

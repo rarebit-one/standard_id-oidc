@@ -1,8 +1,8 @@
 require "rails_helper"
 require "rails/generators"
-require "generators/standard_id/provider/install/install_generator"
+require "generators/standard_id/oidc/install/install_generator"
 
-RSpec.describe StandardId::Provider::Generators::InstallGenerator do
+RSpec.describe StandardId::Oidc::Generators::InstallGenerator do
   let(:destination) { Rails.root.join("tmp/generator_dest") }
 
   # Generators narrate to stdout; swallow it so the suite output stays readable.
@@ -36,21 +36,21 @@ RSpec.describe StandardId::Provider::Generators::InstallGenerator do
     before { run_generator }
 
     it "copies the engine's migrations with the install:migrations suffix" do
-      copied = Dir.glob(destination.join("db/migrate/*.standard_id_provider.rb"))
+      copied = Dir.glob(destination.join("db/migrate/*.standard_id_oidc.rb"))
       expect(copied.size).to eq(2)
       expect(copied.map { |p| File.basename(p) }).to include(
-        a_string_matching(/create_standard_id_consent_grants\.standard_id_provider\.rb\z/),
-        a_string_matching(/create_standard_id_revoked_tokens\.standard_id_provider\.rb\z/)
+        a_string_matching(/create_standard_id_consent_grants\.standard_id_oidc\.rb\z/),
+        a_string_matching(/create_standard_id_revoked_tokens\.standard_id_oidc\.rb\z/)
       )
     end
 
     it "writes the initializer" do
-      expect(read("config/initializers/standard_id_provider.rb"))
+      expect(read("config/initializers/standard_id_oidc.rb"))
         .to include("discovery_endpoint_base")
     end
 
     it "mounts the engine" do
-      expect(read("config/routes.rb")).to include('mount StandardId::Provider::Engine => "/"')
+      expect(read("config/routes.rb")).to include('mount StandardId::Oidc::Engine => "/"')
     end
   end
 
@@ -68,23 +68,23 @@ RSpec.describe StandardId::Provider::Generators::InstallGenerator do
       run_generator
       run_generator
 
-      expect(read("config/routes.rb").scan("StandardId::Provider::Engine").size).to eq(1)
+      expect(read("config/routes.rb").scan("StandardId::Oidc::Engine").size).to eq(1)
     end
 
     it "leaves an existing initializer alone" do
-      write("config/initializers/standard_id_provider.rb", "# hand-edited\n")
+      write("config/initializers/standard_id_oidc.rb", "# hand-edited\n")
 
       run_generator
 
-      expect(read("config/initializers/standard_id_provider.rb")).to eq("# hand-edited\n")
+      expect(read("config/initializers/standard_id_oidc.rb")).to eq("# hand-edited\n")
     end
 
     it "overwrites an existing initializer with --force" do
-      write("config/initializers/standard_id_provider.rb", "# hand-edited\n")
+      write("config/initializers/standard_id_oidc.rb", "# hand-edited\n")
 
       run_generator(%w[--force])
 
-      expect(read("config/initializers/standard_id_provider.rb")).to include("StandardId.configure")
+      expect(read("config/initializers/standard_id_oidc.rb")).to include("StandardId.configure")
     end
   end
 
@@ -98,13 +98,13 @@ RSpec.describe StandardId::Provider::Generators::InstallGenerator do
     it "--skip-initializer writes no initializer" do
       run_generator(%w[--skip-initializer])
 
-      expect(File.exist?(destination.join("config/initializers/standard_id_provider.rb"))).to be false
+      expect(File.exist?(destination.join("config/initializers/standard_id_oidc.rb"))).to be false
     end
 
     it "--skip-routes leaves routes.rb untouched" do
       run_generator(%w[--skip-routes])
 
-      expect(read("config/routes.rb")).not_to include("StandardId::Provider::Engine")
+      expect(read("config/routes.rb")).not_to include("StandardId::Oidc::Engine")
     end
   end
 
@@ -112,7 +112,7 @@ RSpec.describe StandardId::Provider::Generators::InstallGenerator do
     it "mounts at the given path" do
       run_generator(%w[--mount-path /auth])
 
-      expect(read("config/routes.rb")).to include('mount StandardId::Provider::Engine => "/auth"')
+      expect(read("config/routes.rb")).to include('mount StandardId::Oidc::Engine => "/auth"')
     end
   end
 

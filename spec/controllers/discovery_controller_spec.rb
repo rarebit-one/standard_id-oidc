@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe StandardId::Provider::DiscoveryController, type: :request do
+RSpec.describe StandardId::Oidc::DiscoveryController, type: :request do
   # The dummy sets `c.oauth.discovery_endpoint_base` to
   # `->(request:) { "#{request.base_url}/api" }` and mounts ApiEngine under
   # `/api`, so this is where the endpoints actually are.
@@ -35,7 +35,7 @@ RSpec.describe StandardId::Provider::DiscoveryController, type: :request do
     end
 
     # This engine's revoke action, not core's, because this one writes the
-    # denylist that introspection consults. Follows the Provider engine mount.
+    # denylist that introspection consults. Follows the OIDC engine mount.
     it "advertises this engine's revocation endpoint" do
       expect(json_body["revocation_endpoint"]).to eq("http://www.example.com/api/provider/revoke")
     end

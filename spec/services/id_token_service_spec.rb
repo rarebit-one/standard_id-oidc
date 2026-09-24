@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe StandardId::Provider::IdTokenService do
+RSpec.describe StandardId::Oidc::IdTokenService do
   describe ".generate" do
     let(:subject_id) { "user-123" }
     let(:client_id) { "client-abc" }
