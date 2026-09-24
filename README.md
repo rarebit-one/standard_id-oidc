@@ -16,8 +16,13 @@
 > | Before | After |
 > |---|---|
 > | `StandardId::Provider::…` | `StandardId::Oidc::…` |
-> | `rails g standard_id:provider:install` | `rails g standard_id:oidc:install` |
+> | `rails g standard_id:provider:install` | `rails g standard_id:oidc:install` (the old generator name has **no** compat path: it fails with "Could not find generator") |
 > | `config/initializers/standard_id_provider.rb` | `config/initializers/standard_id_oidc.rb` (the file name is cosmetic) |
+>
+> The shim covers runtime code only (the constant and the require path), not
+> the generator name. You don't need to re-run the generator to upgrade. If you
+> do, it treats `.standard_id_provider` migrations, the old initializer file and
+> a `StandardId::Provider::Engine` mount as already installed.
 >
 > Unchanged: the `c.provider.*` settings (they configure the identity-provider
 > role), the table names (`standard_id_consent_grants`,
@@ -213,7 +218,7 @@ the suite aborts on permanently-pending migrations.
 ## Contributing
 
 Bug reports and pull requests are welcome at
-<https://github.com/rarebit-one/standard_id-provider>.
+<https://github.com/rarebit-one/standard_id-oidc>.
 
 Work happens in a git worktree, never the main checkout — see `CLAUDE.md`.
 Commits are signed. CI runs RuboCop, Brakeman, bundler-audit, the full suite on

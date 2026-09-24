@@ -5,16 +5,16 @@ Gem::Specification.new do |spec|
   spec.version     = StandardId::Oidc::VERSION
   spec.authors     = [ "Jaryl Sim" ]
   spec.email       = [ "code@jaryl.dev" ]
-  spec.homepage    = "https://github.com/rarebit-one/standard_id-provider"
+  spec.homepage    = "https://github.com/rarebit-one/standard_id-oidc"
   spec.summary     = "EXPERIMENTAL OpenID Connect Identity Provider addon for StandardId (formerly standard_id-provider)."
   spec.description = "Experimental. Extends StandardId with OIDC Identity Provider capabilities: ID tokens, consent management, " \
                      "token revocation, and discovery. Renamed from standard_id-provider; ships a require/constant shim for the old name."
   spec.license     = "MIT"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/rarebit-one/standard_id-provider"
-  spec.metadata["changelog_uri"] = "https://github.com/rarebit-one/standard_id-provider/blob/main/CHANGELOG.md"
-  spec.metadata["bug_tracker_uri"] = "https://github.com/rarebit-one/standard_id-provider/issues"
+  spec.metadata["source_code_uri"] = "https://github.com/rarebit-one/standard_id-oidc"
+  spec.metadata["changelog_uri"] = "https://github.com/rarebit-one/standard_id-oidc/blob/main/CHANGELOG.md"
+  spec.metadata["bug_tracker_uri"] = "https://github.com/rarebit-one/standard_id-oidc/issues"
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]
