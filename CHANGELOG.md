@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-09-24
+
+**Final release under the `standard_id-provider` name.** The gem is renamed to
+[`standard_id-oidc`](https://rubygems.org/gems/standard_id-oidc) and marked
+experimental; all further development happens there. This release changes no
+behaviour beyond the Rails floor below.
+
+### Deprecated
+
+- **`standard_id-provider` is deprecated — use `standard_id-oidc`.** Swap the
+  Gemfile entry (`gem "standard_id-oidc"`). `standard_id-oidc` ships a
+  `require "standard_id/provider"` shim and keeps `StandardId::Provider` as an
+  alias, so existing initializers, routes and migrations keep working while
+  you move to the new names. A post-install message says the same.
+
 ### Changed
 
 - **Requires Rails 8.1** (`rails >= 8.1`, was `>= 8.0`). Every app in the

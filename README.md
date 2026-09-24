@@ -1,5 +1,13 @@
 # StandardId::Provider
 
+> [!WARNING]
+> **Renamed to [`standard_id-oidc`](https://rubygems.org/gems/standard_id-oidc).**
+> `standard_id-provider` 0.5.0 is the final release under this name. Replace
+> `gem "standard_id-provider"` with `gem "standard_id-oidc"` in your Gemfile;
+> the new gem keeps a `require "standard_id/provider"` shim and a
+> `StandardId::Provider` alias so existing code keeps loading while you migrate.
+> `standard_id-oidc` is **experimental**.
+
 OpenID Connect Identity Provider addon for [`standard_id`](https://github.com/rarebit-one/standard_id).
 
 `standard_id` gives you OAuth 2.0 — authorization codes, token exchange, refresh

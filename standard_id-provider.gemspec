@@ -6,8 +6,14 @@ Gem::Specification.new do |spec|
   spec.authors     = [ "Jaryl Sim" ]
   spec.email       = [ "code@jaryl.dev" ]
   spec.homepage    = "https://github.com/rarebit-one/standard_id-provider"
-  spec.summary     = "OpenID Connect Identity Provider addon for StandardId."
-  spec.description = "Extends StandardId with full OIDC Identity Provider capabilities: ID tokens, consent management, token introspection, token revocation, and discovery."
+  spec.summary     = "DEPRECATED: renamed to standard_id-oidc. OpenID Connect Identity Provider addon for StandardId."
+  spec.description = "DEPRECATED — this gem is renamed to standard_id-oidc; 0.5.0 is the final release under this name. " \
+                     "Extends StandardId with full OIDC Identity Provider capabilities: ID tokens, consent management, token introspection, token revocation, and discovery."
+  spec.post_install_message = <<~MSG
+    standard_id-provider is deprecated and renamed to standard_id-oidc (experimental).
+    0.5.0 is the final release under this name. Replace it in your Gemfile with:
+      gem "standard_id-oidc"
+  MSG
   spec.license     = "MIT"
 
   spec.metadata["homepage_uri"] = spec.homepage
