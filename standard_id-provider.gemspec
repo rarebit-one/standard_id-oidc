@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = ">= 4.0"
 
-  spec.add_dependency "rails", ">= 8.0"
+  spec.add_dependency "rails", ">= 8.1"
 
   # `~> 0.33` — TWO components, deliberately. It means `>= 0.33, < 1.0`.
   #
