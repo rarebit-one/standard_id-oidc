@@ -1,9 +1,9 @@
 require "rails_helper"
 
 # This engine no longer ships its own introspection endpoint. It contributes
-# the StandardId::Provider::RevokedToken denylist into CORE's RFC 7662 endpoint
+# the StandardId::Oidc::RevokedToken denylist into CORE's RFC 7662 endpoint
 # (POST /oauth/introspect) via
-# StandardId::Provider::Extensions::IntrospectionsControllerExt.
+# StandardId::Oidc::Extensions::IntrospectionsControllerExt.
 #
 # Core has its own specs for the endpoint's RFC conformance; these cover only
 # the part this gem adds — and the part core cannot do on its own, since it
@@ -26,7 +26,7 @@ RSpec.describe "Introspection denylist", type: :request do
     it "reports a denylisted access token as inactive" do
       jti = SecureRandom.uuid
       token = generate_access_token(sub: "user-1", jti: jti)
-      StandardId::Provider::RevokedToken.revoke!(jti: jti)
+      StandardId::Oidc::RevokedToken.revoke!(jti: jti)
 
       post "/api/oauth/introspect", params: { token: token }, headers: auth_headers
 
@@ -39,7 +39,7 @@ RSpec.describe "Introspection denylist", type: :request do
     it "reveals nothing beyond active: false for a denylisted token" do
       jti = SecureRandom.uuid
       token = generate_access_token(sub: "user-1", jti: jti)
-      StandardId::Provider::RevokedToken.revoke!(jti: jti)
+      StandardId::Oidc::RevokedToken.revoke!(jti: jti)
 
       post "/api/oauth/introspect", params: { token: token }, headers: auth_headers
 
@@ -49,7 +49,7 @@ RSpec.describe "Introspection denylist", type: :request do
 
     it "leaves a token whose jti was never denylisted alone" do
       token = generate_access_token(sub: "user-1", jti: SecureRandom.uuid)
-      StandardId::Provider::RevokedToken.revoke!(jti: SecureRandom.uuid)
+      StandardId::Oidc::RevokedToken.revoke!(jti: SecureRandom.uuid)
 
       post "/api/oauth/introspect", params: { token: token }, headers: auth_headers
 

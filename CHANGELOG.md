@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-09-24
+
+**First release as `standard_id-oidc`** (renamed from `standard_id-provider`,
+whose final release is 0.5.0). Now marked **experimental**. No behaviour change.
+
+### Changed
+
+- **Gem renamed `standard_id-provider` → `standard_id-oidc`.** The Ruby
+  namespace is now `StandardId::Oidc` (was `StandardId::Provider`), the require
+  path is `standard_id/oidc`, the engine is `standard_id_oidc`, and the install
+  generator is `rails g standard_id:oidc:install` (it writes
+  `config/initializers/standard_id_oidc.rb`).
+- Unchanged: the `c.provider.*` settings, the table names and the migrations.
+
+### Deprecated
+
+- `StandardId::Provider` stays as an alias of `StandardId::Oidc`, flagged with
+  `deprecate_constant`, and `require "standard_id/provider"` still loads the
+  gem with a deprecation warning. Both will be removed in a future minor release.
+
 ## [0.5.0] - 2026-09-24
 
 **Final release under the `standard_id-provider` name.** The gem is renamed to

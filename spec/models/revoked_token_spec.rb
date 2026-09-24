@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe StandardId::Provider::RevokedToken, type: :model do
+RSpec.describe StandardId::Oidc::RevokedToken, type: :model do
   describe "validations" do
     subject { described_class.new(jti: "unique-jti", revoked_at: Time.current, expires_at: 1.day.from_now) }
 

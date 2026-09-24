@@ -27,7 +27,7 @@ See the `/worktree` and `/start` skills for full conventions and flags.
 
 ## What this gem is
 
-`standard_id-provider` is the **OpenID Connect Identity Provider addon** for `standard_id`: ID tokens, consent grants, an access-token revocation denylist, and the OIDC discovery document.
+`standard_id-oidc` is the **OpenID Connect Identity Provider addon** for `standard_id`: ID tokens, consent grants, an access-token revocation denylist, and the OIDC discovery document.
 
 It is **not** "scaffolding for building provider plugins" — that description was wrong and is corrected here. `standard_id-apple` and `standard_id-google` are social-login provider plugins with no relationship to this gem beyond the name.
 

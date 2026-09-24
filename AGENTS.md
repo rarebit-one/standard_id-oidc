@@ -1,6 +1,8 @@
-# AGENTS.md - AI Agent Guide for standard_id-provider
+# AGENTS.md - AI Agent Guide for standard_id-oidc
 
-`standard_id-provider` is an OpenID Connect (OIDC) Identity Provider addon for the [`standard_id`](https://github.com/rarebit-one/standard_id) authentication engine. `standard_id` provides OAuth 2.0; this engine adds the OIDC layer on top: ID tokens, consent grants, an access-token revocation denylist, and the discovery document.
+`standard_id-oidc` is an OpenID Connect (OIDC) Identity Provider addon for the [`standard_id`](https://github.com/rarebit-one/standard_id) authentication engine. `standard_id` provides OAuth 2.0; this engine adds the OIDC layer on top: ID tokens, consent grants, an access-token revocation denylist, and the discovery document.
+
+**Experimental**, and **formerly `standard_id-provider`** (final release 0.5.0; the GitHub repo still carries the old name). `lib/standard_id/provider.rb` is a require shim and `StandardId::Provider` is a `deprecate_constant` alias defined in `lib/standard_id/oidc.rb`. `spec/compat/provider_shim_spec.rb` covers both. Keep them until a minor release announces their removal.
 
 **It is not scaffolding for building provider plugins.** `standard_id-apple` and `standard_id-google` are social-login provider plugins and are unrelated to this gem despite the similar name.
 
@@ -30,18 +32,18 @@ bin/rails app:db:migrate
 ## Project Structure
 
 ```
-standard_id-provider/
+standard_id-oidc/
 ├── app/
-│   ├── controllers/standard_id/provider/
+│   ├── controllers/standard_id/oidc/
 │   │   ├── discovery_controller.rb         # /.well-known/openid-configuration
 │   │   ├── revocation_controller.rb        # RFC 7009 token revocation
 │   │   └── consent_controller.rb           # consent grant management
-│   └── models/standard_id/provider/
+│   └── models/standard_id/oidc/
 │       ├── consent_grant.rb                # Per-client/per-user scope grants
 │       └── revoked_token.rb                # jti denylist
 ├── lib/
-│   ├── generators/standard_id/provider/install/   # rails g standard_id:provider:install
-│   └── standard_id/provider/
+│   ├── generators/standard_id/oidc/install/   # rails g standard_id:oidc:install
+│   └── standard_id/oidc/
 │       ├── engine.rb                       # Rails engine + all the prepends
 │       ├── config/schema.rb                # Configuration DSL
 │       ├── id_token_service.rb             # ID token (JWT) issuance
@@ -58,7 +60,7 @@ standard_id-provider/
 
 ### The prepends are the whole design — and the whole risk
 
-`lib/standard_id/provider/engine.rb` prepends into **five non-public `standard_id` classes**. None are part of `standard_id`'s public API; a minor release can change them without breaking its own semver contract.
+`lib/standard_id/oidc/engine.rb` prepends into **five non-public `standard_id` classes**. None are part of `standard_id`'s public API; a minor release can change them without breaking its own semver contract.
 
 | Target | Extension | Why |
 |---|---|---|
@@ -90,7 +92,7 @@ If you are tempted to add a duplicate of something core has, check core first.
 
 ### Configuration
 
-Defined in `lib/standard_id/provider/config/schema.rb` via the upstream `StandardId::ConfigSchema` DSL:
+Defined in `lib/standard_id/oidc/config/schema.rb` via the upstream `StandardId::ConfigSchema` DSL:
 
 ```ruby
 StandardId.config.provider.id_token_lifetime            # 3600
@@ -108,12 +110,12 @@ Config fields that nothing reads are a recurring defect here: `provider.introspe
 
 | Model | Table | Purpose |
 |-------|-------|---------|
-| `StandardId::Provider::ConsentGrant` | `standard_id_consent_grants` | Scopes a user granted a client; checked on subsequent authorization requests |
-| `StandardId::Provider::RevokedToken` | `standard_id_revoked_tokens` | `jti` denylist; `revoke!` is idempotent, `cleanup_expired!` prunes |
+| `StandardId::Oidc::ConsentGrant` | `standard_id_consent_grants` | Scopes a user granted a client; checked on subsequent authorization requests |
+| `StandardId::Oidc::RevokedToken` | `standard_id_revoked_tokens` | `jti` denylist; `revoke!` is idempotent, `cleanup_expired!` prunes |
 
 ### ID Token Service
 
-`StandardId::Provider::IdTokenService` builds RFC 7519 JWTs signed with the host app's StandardId signing key. Claims: `iss`, `sub`, `aud`, `exp`, `iat`, `nonce`, `auth_time`, `at_hash`, `c_hash`. Optional claims are gated by granted scopes.
+`StandardId::Oidc::IdTokenService` builds RFC 7519 JWTs signed with the host app's StandardId signing key. Claims: `iss`, `sub`, `aud`, `exp`, `iat`, `nonce`, `auth_time`, `at_hash`, `c_hash`. Optional claims are gated by granted scopes.
 
 ## Security Notes
 
@@ -128,7 +130,7 @@ Config fields that nothing reads are a recurring defect here: `provider.introspe
 - Specs run against `spec/dummy`, mounting this engine plus `StandardId::WebEngine` and `StandardId::ApiEngine` (the latter under `/api`)
 - **`spec/dummy/config/database.yml` sets `migrations_paths` explicitly — leave it.** Without it Rails falls back to the relative default `"db/migrate"`, which resolves against RSpec's CWD (the gem root) rather than the dummy app. That mismatch made `maintain_test_schema!` report the engine's own migrations as permanently pending and aborted the suite before a single example ran — which is why CI ran no tests at all until it was fixed.
 - `spec/dummy/db/schema.rb` and `spec/dummy/db/migrate/*.standard_id.rb` are committed; RuboCop excludes them as upstream artifacts
-- `spec/extensions/` covers the boundary with upstream OAuth flows — keep it green when touching `lib/standard_id/provider/extensions/`
+- `spec/extensions/` covers the boundary with upstream OAuth flows — keep it green when touching `lib/standard_id/oidc/extensions/`
 
 ## Dependencies
 

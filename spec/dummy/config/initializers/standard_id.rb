@@ -6,7 +6,7 @@ StandardId.configure do |c|
   # "issuer must be configured" branch went untested.
   c.issuer = "https://issuer.example.com"
 
-  # The dummy mounts ApiEngine under `/api` while the Provider engine sits at
+  # The dummy mounts ApiEngine under `/api` while the OIDC engine sits at
   # `/`, which is exactly the split that makes `:request` the wrong answer:
   # the discovery controller's SCRIPT_NAME is the PROVIDER mount, not
   # ApiEngine's. Naming the base explicitly is the supported fix, and it is
