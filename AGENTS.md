@@ -2,7 +2,7 @@
 
 `standard_id-oidc` is an OpenID Connect (OIDC) Identity Provider addon for the [`standard_id`](https://github.com/rarebit-one/standard_id) authentication engine. `standard_id` provides OAuth 2.0; this engine adds the OIDC layer on top: ID tokens, consent grants, an access-token revocation denylist, and the discovery document.
 
-**Experimental**, and **formerly `standard_id-provider`** (final release 0.5.0; the GitHub repo still carries the old name). `lib/standard_id/provider.rb` is a require shim and `StandardId::Provider` is a `deprecate_constant` alias defined in `lib/standard_id/oidc.rb`. `spec/compat/provider_shim_spec.rb` covers both. Keep them until a minor release announces their removal.
+**Experimental**, and **formerly `standard_id-provider`** (final release 0.5.0; the GitHub repo was renamed to match, and GitHub redirects the old URL). `lib/standard_id/provider.rb` is a require shim and `StandardId::Provider` is a `deprecate_constant` alias defined in `lib/standard_id/oidc.rb`. `spec/compat/provider_shim_spec.rb` covers both. Keep them until a minor release announces their removal.
 
 **It is not scaffolding for building provider plugins.** `standard_id-apple` and `standard_id-google` are social-login provider plugins and are unrelated to this gem despite the similar name.
 

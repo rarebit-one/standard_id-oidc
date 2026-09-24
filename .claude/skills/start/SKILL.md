@@ -1,17 +1,17 @@
 ---
 name: start
-description: "Start working on GitHub Issues (in rarebit-one/standard_id-provider). Use when the user says 'start working on', 'pick up issue', 'work on #42', 'start #42', '/start', or wants to begin development on a planned issue. Handles context gathering, branch creation, and in-progress signaling."
+description: "Start working on GitHub Issues (in rarebit-one/standard_id-oidc). Use when the user says 'start working on', 'pick up issue', 'work on #42', 'start #42', '/start', or wants to begin development on a planned issue. Handles context gathering, branch creation, and in-progress signaling."
 ---
 
 # Start Skill
 
 Begin working on GitHub Issues with proper setup: signal in-progress, create branches, gather context, and track progress.
 
-> **Planning system:** This repo's planning lives in **GitHub Issues in the `rarebit-one/standard_id-provider` repo** (its own issues). Code and issues live in the same repo, so PRs that say `Closes #NN` auto-close the issue on merge.
+> **Planning system:** This repo's planning lives in **GitHub Issues in the `rarebit-one/standard_id-oidc` repo** (its own issues). Code and issues live in the same repo, so PRs that say `Closes #NN` auto-close the issue on merge.
 
 ## Prerequisites
 
-This skill uses the `gh` CLI against `rarebit-one/standard_id-provider`. If `gh` is unavailable or you lack access, the skill will warn and offer to proceed with git-only setup (branch creation without in-progress signaling — you supply the issue context).
+This skill uses the `gh` CLI against `rarebit-one/standard_id-oidc`. If `gh` is unavailable or you lack access, the skill will warn and offer to proceed with git-only setup (branch creation without in-progress signaling — you supply the issue context).
 
 ## Scope
 
@@ -28,7 +28,7 @@ This skill sets up local development for GitHub Issues. It does **NOT**:
 /start --backlog                 # Show open, unassigned issues
 ```
 
-Accepted identifier forms: `42`, `#42`, `standard_id-provider-42`, or a full issue URL. All normalize to the issue number.
+Accepted identifier forms: `42`, `#42`, `standard_id-oidc-42`, or a full issue URL. All normalize to the issue number.
 
 ## Workflow
 
@@ -39,11 +39,11 @@ Accepted identifier forms: `42`, `#42`, `standard_id-provider-42`, or a full iss
 Fetch each issue with `gh`:
 
 ```bash
-gh api repos/rarebit-one/standard_id-provider/issues/<n> \
+gh api repos/rarebit-one/standard_id-oidc/issues/<n> \
   --jq '{number, title, state, labels: [.labels[].name], assignees: [.assignees[].login], milestone: .milestone.title, body}'
 
 # Comments often carry decisions and clarifications — read them too
-gh api repos/rarebit-one/standard_id-provider/issues/<n>/comments \
+gh api repos/rarebit-one/standard_id-oidc/issues/<n>/comments \
   --jq '.[] | {user: .user.login, created_at, body}'
 ```
 
@@ -52,13 +52,13 @@ The title, body, labels, and comments are the context for the work.
 **If `--mine` flag:**
 
 ```bash
-gh issue list -R rarebit-one/standard_id-provider --assignee @me --state open --limit 10
+gh issue list -R rarebit-one/standard_id-oidc --assignee @me --state open --limit 10
 ```
 
 **If `--backlog` flag (optionally with `--label <name>`):**
 
 ```bash
-gh issue list -R rarebit-one/standard_id-provider --state open --search "no:assignee" --limit 10
+gh issue list -R rarebit-one/standard_id-oidc --state open --search "no:assignee" --limit 10
 ```
 
 > "Backlog" here means open + unassigned. If the repo adopts a `backlog` label or triage milestone, prefer `--label backlog` to avoid surfacing untriaged issues.
@@ -74,7 +74,7 @@ Before starting, verify:
 GitHub Issues has no native blocking relations — scan the issue body and comments for "blocked by", "depends on", or `#NN` references, and check the state of any referenced issues. This scan is **heuristic**: a bare `#NN` mention may be incidental (e.g. "see discussion in #40"), so read the surrounding context before raising a blocker warning.
 
 ```bash
-gh api repos/rarebit-one/standard_id-provider/issues/<referenced-n> --jq '{number, title, state}'
+gh api repos/rarebit-one/standard_id-oidc/issues/<referenced-n> --jq '{number, title, state}'
 ```
 
 If blocked:
@@ -101,9 +101,9 @@ If missing context, warn but allow proceeding.
 Mark the issue in-progress by assigning yourself (and applying an in-progress label if the repo uses one):
 
 ```bash
-gh issue edit <n> -R rarebit-one/standard_id-provider --add-assignee @me
+gh issue edit <n> -R rarebit-one/standard_id-oidc --add-assignee @me
 # If the repo uses an in-progress label:
-gh issue edit <n> -R rarebit-one/standard_id-provider --add-label "in progress"
+gh issue edit <n> -R rarebit-one/standard_id-oidc --add-label "in progress"
 ```
 
 The workflow should not block on GitHub failures — local development can proceed. On a transient `gh` failure (e.g. 401), retry once before surfacing the error.
@@ -146,7 +146,7 @@ Derive the branch name from the issue number plus a short slug of the issue titl
 ```
 Starting: #42
 Issue: <title>
-URL: https://github.com/rarebit-one/standard_id-provider/issues/42
+URL: https://github.com/rarebit-one/standard_id-oidc/issues/42
 
 Description:
 <full description>
@@ -165,7 +165,7 @@ Based on the issue description, create a todo list to track progress.
 
 | Flag | Description |
 |------|-------------|
-| `--mine` | List my assigned open issues in rarebit-one/standard_id-provider |
+| `--mine` | List my assigned open issues in rarebit-one/standard_id-oidc |
 | `--backlog` | List open, unassigned issues |
 | `--no-worktree` | Skip worktree if on the default branch + clean; stops with error otherwise |
 | `--no-status` | Skip the in-progress signal (just create branch) |
@@ -177,7 +177,7 @@ Based on the issue description, create a todo list to track progress.
 |-------|----------|
 | `gh` returns 401 | Retry once (transient token issue); if it persists, check `gh auth status` and ask the user |
 | `gh` unavailable / no access | Warn and offer to proceed with just git setup (user supplies issue context) |
-| Issue not found | Verify the number; confirm the repo is `rarebit-one/standard_id-provider` |
+| Issue not found | Verify the number; confirm the repo is `rarebit-one/standard_id-oidc` |
 | Issue already assigned / in progress | Ask if user wants to continue anyway |
 | Issue is closed | Warn and suggest reopening or selecting a different issue |
 | In-progress signal fails | Offer to continue with local setup, retry, or cancel |

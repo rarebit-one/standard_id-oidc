@@ -88,6 +88,28 @@ RSpec.describe StandardId::Oidc::Generators::InstallGenerator do
     end
   end
 
+  describe "a host upgraded from standard_id-provider" do
+    before do
+      write("db/migrate/20260101000000_create_standard_id_consent_grants.standard_id_provider.rb", "# legacy\n")
+      write("db/migrate/20260101000001_create_standard_id_revoked_tokens.standard_id_provider.rb", "# legacy\n")
+      write("config/initializers/standard_id_provider.rb", "# legacy\n")
+      write("config/routes.rb", "Rails.application.routes.draw do\n  mount StandardId::Provider::Engine => \"/\"\nend\n")
+      run_generator
+    end
+
+    it "treats the legacy-suffixed migrations as installed" do
+      expect(Dir.glob(destination.join("db/migrate/*.standard_id_oidc.rb"))).to be_empty
+    end
+
+    it "does not write a second initializer next to the legacy one" do
+      expect(File.exist?(destination.join("config/initializers/standard_id_oidc.rb"))).to be false
+    end
+
+    it "does not mount the engine again under the new name" do
+      expect(read("config/routes.rb")).not_to include("StandardId::Oidc::Engine")
+    end
+  end
+
   describe "skip flags" do
     it "--skip-migrations copies nothing into db/migrate" do
       run_generator(%w[--skip-migrations])

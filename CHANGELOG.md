@@ -18,7 +18,17 @@ whose final release is 0.5.0). Now marked **experimental**. No behaviour change.
   namespace is now `StandardId::Oidc` (was `StandardId::Provider`), the require
   path is `standard_id/oidc`, the engine is `standard_id_oidc`, and the install
   generator is `rails g standard_id:oidc:install` (it writes
-  `config/initializers/standard_id_oidc.rb`).
+  `config/initializers/standard_id_oidc.rb`). The old generator name,
+  `standard_id:provider:install`, has **no** compat path: it now fails with
+  "Could not find generator".
+- The install generator treats a former-name install as present. It recognises
+  migrations with the `.standard_id_provider` suffix, an existing
+  `config/initializers/standard_id_provider.rb` and a
+  `StandardId::Provider::Engine` mount, so re-running it on an upgraded host
+  doesn't copy migrations, write an initializer or mount the engine a second time.
+- Repository renamed to
+  [`rarebit-one/standard_id-oidc`](https://github.com/rarebit-one/standard_id-oidc);
+  the gemspec's homepage, source, changelog and bug-tracker URLs point at it.
 - Unchanged: the `c.provider.*` settings, the table names and the migrations.
 
 ### Deprecated

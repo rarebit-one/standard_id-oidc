@@ -31,6 +31,8 @@ module StandardId
           Run `rails db:migrate` afterwards.
         DESC
 
+        LEGACY_INITIALIZER = "config/initializers/standard_id_provider.rb"
+
         class_option :skip_migrations, type: :boolean, default: false,
           desc: "Do not copy the engine's migrations into db/migrate"
         class_option :skip_initializer, type: :boolean, default: false,
@@ -47,6 +49,8 @@ module StandardId
         # two are interchangeable and neither double-installs the other's work.
         # Done in-process rather than by shelling out to that rake task so the
         # generator stays testable and does not need a booted host app.
+        # Migrations copied under the gem's former name (`.standard_id_provider`
+        # suffix) count as installed, so an upgraded host is not double-migrated.
         def copy_migrations
           if options[:skip_migrations]
             say_status("skip", "db/migrate (--skip-migrations)", :yellow)
@@ -76,6 +80,11 @@ module StandardId
             return
           end
 
+          if File.exist?(File.join(destination_root, LEGACY_INITIALIZER)) && !options[:force]
+            say_status("identical", "#{LEGACY_INITIALIZER} (former name; rename it at your leisure)", :blue)
+            return
+          end
+
           if File.exist?(File.join(destination_root, path)) && !options[:force]
             say_status("identical", "#{path} (already exists; pass --force to overwrite)", :blue)
             return
@@ -97,7 +106,9 @@ module StandardId
             return
           end
 
-          if File.read(File.join(destination_root, routes_path)).include?("StandardId::Oidc::Engine")
+          # StandardId::Provider is an alias of StandardId::Oidc, so a legacy
+          # mount is the same engine; mounting it again would duplicate routes.
+          if File.read(File.join(destination_root, routes_path)).match?(/StandardId::(Oidc|Provider)::Engine/)
             say_status("identical", "#{routes_path} (engine already mounted)", :blue)
             return
           end
@@ -119,7 +130,7 @@ module StandardId
 
         no_commands do
           def existing_migrations
-            Dir.glob(File.join(destination_root, "db/migrate/*.standard_id_oidc.rb"))
+            Dir.glob(File.join(destination_root, "db/migrate/*.{standard_id_oidc,standard_id_provider}.rb"))
           end
 
           def engine_migrations
