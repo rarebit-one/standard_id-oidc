@@ -132,7 +132,7 @@ Config fields that nothing reads are a recurring defect here: `provider.introspe
 
 ## Dependencies
 
-- **rails** >= 8.0
+- **rails** >= 8.1
 - **standard_id** ~> 0.33 (peer engine providing accounts, sessions, OAuth flows)
 - **brakeman**, **bundler-audit** (CI security scans)
 - **rspec-rails** ~> 8.0, **shoulda-matchers** ~> 7.0 (test stack)
