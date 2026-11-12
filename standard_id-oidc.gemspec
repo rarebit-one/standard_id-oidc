@@ -3,7 +3,7 @@ require_relative "lib/standard_id/oidc/version"
 Gem::Specification.new do |spec|
   spec.name        = "standard_id-oidc"
   spec.version     = StandardId::Oidc::VERSION
-  spec.authors     = [ "Jaryl Sim" ]
+  spec.authors     = [ "Rarebit One" ]
   spec.email       = [ "code@jaryl.dev" ]
   spec.homepage    = "https://github.com/rarebit-one/standard_id-oidc"
   spec.summary     = "EXPERIMENTAL OpenID Connect Identity Provider addon for StandardId (formerly standard_id-provider)."
