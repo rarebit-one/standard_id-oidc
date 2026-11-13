@@ -222,7 +222,7 @@ Bug reports and pull requests are welcome at
 
 Work happens in a git worktree, never the main checkout — see `CLAUDE.md`.
 Commits are signed. CI runs RuboCop, Brakeman, bundler-audit, the full suite on
-Ruby 4.0.0–4.0.4, and the `compat` job against the latest published
+Ruby 4.0.0–4.0.4 and 4.0.9, and the `compat` job against the latest published
 `standard_id`.
 
 ## License
